@@ -1,0 +1,40 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the Tesana Cognitive Engine.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string", "format": "uri" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "SimulationState": {
+      "title": "SimulationState",
+      "description": "A saved state of the BRNS grid.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Name of the saved state" },
+        "logic": { "type": "string", "enum": ["diversion", "dam", "crush"] },
+        "nodesData": { "type": "string", "description": "JSON stringified array of node states (id, baseValue, currentValue, isSender)" },
+        "authorId": { "type": "string", "description": "UID of the user who saved this state" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "logic", "nodesData", "authorId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles."
+    },
+    "/simulations/{simulationId}": {
+      "schema": { "$ref": "#/entities/SimulationState" },
+      "description": "Saved simulation states."
+    }
+  }
+}
