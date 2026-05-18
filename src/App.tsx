@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AuthPanel } from './components/AuthPanel';
 import { AIControlPanel } from './components/AIControlPanel';
 import { NodeDetailsPanel } from './components/NodeDetailsPanel';
+import { StorageManager } from './components/StorageManager';
 
 type Tool = 'sender' | 'break' | 'heal' | 'select';
 type Logic = 'diversion' | 'dam' | 'crush';
@@ -309,6 +310,28 @@ export default function App() {
                 ctx.fill();
                 ctx.shadowBlur = 0;
                 
+                // Add value overlay
+                const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, nodeRadius * 3);
+                const alpha = Math.min(0.4, Math.max(0, (node.currentValue - 0.5) * 0.2));
+                
+                let isHigh = false;
+                if (node.currentValue > 1.5) {
+                    gradient.addColorStop(0, `rgba(255, 34, 34, ${alpha})`);
+                    gradient.addColorStop(1, 'rgba(255, 34, 34, 0)');
+                    isHigh = true;
+                } else if (node.currentValue > 1.0) {
+                    gradient.addColorStop(0, `rgba(8, 221, 221, ${alpha})`);
+                    gradient.addColorStop(1, 'rgba(8, 221, 221, 0)');
+                    isHigh = true;
+                }
+                
+                if (isHigh) {
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, nodeRadius * 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
                 if (node.isSender) {
                     ctx.strokeStyle = '#fff';
                     ctx.lineWidth = 2;
@@ -523,6 +546,11 @@ export default function App() {
                         >
                             HEAL (RESET)
                         </button>
+                    </div>
+
+                    <div className="mb-8 p-3 bg-[#0a0c10] border border-[#2a2d35] rounded-lg">
+                        <p className="text-[10px] uppercase tracking-widest text-[#8E9299] font-mono mb-3">Cloud Persistence</p>
+                        <StorageManager nodesRef={nodesRef} currentLogic={currentLogic} onLoadState={handleLoadState} />
                     </div>
 
                     <button 

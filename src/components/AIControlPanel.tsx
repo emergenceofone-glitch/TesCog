@@ -128,38 +128,6 @@ export function AIControlPanel({ nodesRef, currentLogic, onLoadState }: AIContro
                     {analogiesResult}
                 </div>
             )}
-
-            <div className="border-t border-[#2a2d35] pt-4 mt-2">
-                <div className="flex gap-2">
-                    <button 
-                        onClick={handleSaveState} disabled={saving || !auth.currentUser}
-                        className="flex-1 py-2 text-xs font-mono border border-[#8E9299] text-[#8E9299] rounded hover:text-white hover:border-white transition-colors disabled:opacity-50"
-                    >
-                        {saving ? 'SAVING...' : 'SAVE STATE'}
-                    </button>
-                    <button 
-                        onClick={handleLoadStates} disabled={loadingStates || !auth.currentUser}
-                        className="flex-1 py-2 text-xs font-mono border border-[#8E9299] text-[#8E9299] rounded hover:text-white hover:border-white transition-colors disabled:opacity-50"
-                    >
-                        {loadingStates ? 'LOADING...' : 'LOAD STATE'}
-                    </button>
-                </div>
-            </div>
-
-            {savedStates.length > 0 && (
-                <div className="bg-[#0a0c10] p-2 rounded border border-[#2a2d35] flex flex-col gap-2">
-                    <span className="text-[10px] text-[#8E9299] uppercase">Select State to Load:</span>
-                    {savedStates.map(state => (
-                        <button 
-                            key={state.id} 
-                            onClick={() => applyState(state)}
-                            className="text-left text-xs font-mono p-2 hover:bg-[#2a2d35] rounded transition-colors text-[#08DDDD]"
-                        >
-                            {state.name} ({state.logic})
-                        </button>
-                    ))}
-                </div>
-            )}
         </div>
     );
 }
