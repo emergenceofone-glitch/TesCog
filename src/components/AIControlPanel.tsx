@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { analyzeNetwork, getRealWorldAnalogies } from '../services/aiService';
 import { auth, db, handleFirestoreError, OperationType } from '../firebase';
 import { collection, addDoc, serverTimestamp, getDocs, query, where } from 'firebase/firestore';
@@ -116,16 +117,20 @@ export function AIControlPanel({ nodesRef, currentLogic, onLoadState }: AIContro
             </div>
 
             {analysisResult && (
-                <div className="bg-[#0a0c10] p-3 rounded border border-[#2a2d35] text-xs font-mono text-gray-300 whitespace-pre-wrap">
-                    <span className="text-[#08DDDD] block mb-1">&gt;&gt; ANALYSIS REPORT:</span>
-                    {analysisResult}
+                <div className="bg-[#0a0c10] p-3 rounded border border-[#2a2d35] text-xs font-mono text-gray-300">
+                    <span className="text-[#08DDDD] block mb-1 tracking-widest">&gt;&gt; ANALYSIS REPORT:</span>
+                    <div className="markdown-body">
+                        <ReactMarkdown>{analysisResult}</ReactMarkdown>
+                    </div>
                 </div>
             )}
 
             {analogiesResult && (
-                <div className="bg-[#0a0c10] p-3 rounded border border-[#2a2d35] text-xs font-mono text-gray-300 whitespace-pre-wrap">
-                    <span className="text-[#08DDDD] block mb-1">&gt;&gt; SEARCH GROUNDING:</span>
-                    {analogiesResult}
+                <div className="bg-[#0a0c10] p-3 rounded border border-[#2a2d35] text-xs font-mono text-gray-300">
+                    <span className="text-[#08DDDD] block mb-1 tracking-widest">&gt;&gt; SEARCH GROUNDING:</span>
+                    <div className="markdown-body">
+                        <ReactMarkdown>{analogiesResult}</ReactMarkdown>
+                    </div>
                 </div>
             )}
         </div>

@@ -18,16 +18,30 @@ function getAI() {
 export async function analyzeNetwork(nodesData: any[], logic: string) {
   const client = getAI();
   
+  const totalNodes = nodesData.length;
+  const activeSenders = nodesData.filter(n => n.isSender).length;
+  const unstableNodes = nodesData.filter(n => n.baseValue < 1.0).length;
+  const overchargedNodes = nodesData.filter(n => n.currentValue > 1.5).length;
+  const unstablePercentage = ((unstableNodes / totalNodes) * 100).toFixed(1);
+
   const prompt = `
 You are a Tesana Systems Engineer analyzing a BRNS State Vector Simulation.
 The user has provided a network grid with the following logic rule: ${logic}.
-Here is the current state of the nodes (only showing senders and instabilities for brevity):
+
+Network Statistics:
+- Total Nodes: ${totalNodes}
+- Active Senders: ${activeSenders}
+- Unstable Nodes: ${unstableNodes} (${unstablePercentage}%)
+- Overcharged Nodes: ${overchargedNodes}
+
+Here is the detailed state of relevant nodes (senders and instabilities):
 ${JSON.stringify(nodesData.filter(n => n.isSender || n.baseValue < 1.0), null, 2)}
 
 Analyze the network architecture.
-1. Identify potential failure points based on the logic rule.
-2. Provide a brief architectural feedback.
-3. Suggest an optimal placement for a new sender or instability to improve network resilience.
+1. Provide a high-level summary of the "current state" of the network based on the statistics provided.
+2. Identify potential failure points based on the logic rule.
+3. Provide a brief architectural feedback.
+4. Suggest an optimal placement for a new sender or instability to improve network resilience.
 
 Keep your response concise, technical, and in the tone of a specialist engineer.
   `;
